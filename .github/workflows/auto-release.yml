@@ -10,6 +10,11 @@ permissions:
   packages: write
   id-token: write
 
+# Prevent concurrent releases
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   auto-release:
     runs-on: ubuntu-latest
@@ -47,17 +52,15 @@ jobs:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-        twine upload dist/*
+        twine upload dist/* --skip-existing
 
     - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref }}
-        release_name: strands-cloudflare v${{ steps.get_version.outputs.version }}
+        name: strands-cloudflare v${{ steps.get_version.outputs.version }}
         body: |
-          ## 📄 strands-cloudflare v${{ steps.get_version.outputs.version }}
+          ## 🚀 strands-cloudflare v${{ steps.get_version.outputs.version }}
           
           ### 📦 Installation
           ```bash
@@ -69,16 +72,18 @@ jobs:
           pip install --upgrade strands-cloudflare
           ```
           
-          ### 📋 Changes
+          ### 📝 Changes
           This release includes the latest changes tagged as v${{ steps.get_version.outputs.version }}.
           
           **Full Changelog**: https://github.com/mertozbas/strands-cloudflare/releases
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Summary
       run: |
-        echo "## 🎉 Release Summary" >> $GITHUB_STEP_SUMMARY
+        echo "## 🚀 Release Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "- **Version:** v${{ steps.get_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
         echo "- **PyPI:** https://pypi.org/project/strands-cloudflare/${{ steps.get_version.outputs.version }}/" >> $GITHUB_STEP_SUMMARY
