@@ -7,7 +7,7 @@ name = "strands-cloudflare"
 dynamic = ["version"]
 description = "Universal Cloudflare tool for Strands Agents - manage Zones, DNS, Workers, KV, R2, D1, Pages, AI, Tunnels and other services."
 readme = "README.md"
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
 authors = [
     {name = "Hashtag World", email = "dev@hashtagworld.co"}
 ]
@@ -65,6 +65,9 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["strands_cloudflare*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "strands_cloudflare.__version__"}
 
 [tool.black]
 line-length = 120
