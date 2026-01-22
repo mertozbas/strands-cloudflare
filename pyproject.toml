@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "strands-cloudflare"
-version = "0.1.0"
-description = "Universal Cloudflare tool for Strands Agents - manage Zones, DNS, Workers, KV, R2, D1, Pages, AI, Tunnels and 25+ more services"
+dynamic = ["version"]
+description = "Universal Cloudflare tool for Strands Agents - manage Zones, DNS, Workers, KV, R2, D1, Pages, AI, Tunnels and other services."
 readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [
@@ -44,7 +44,8 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "strands-agents>=0.1.0",
+    "strands-agents",
+    "cloudflare>=3.0.0",
 ]
 
 [project.urls]
